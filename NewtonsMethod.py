@@ -69,6 +69,7 @@ def newtonMethod(guess, equation, derivative):
 
     # Do newton's method, subbing in x into the sympy equations and rounding to 6 places
     try:
+        # Try to calculate the first value and print it out
         result = Decimal(guess - Decimal( equation(guess)/derivative(guess) )).quantize(Decimal('1.000000'))
         print "x1 = {}".format(result)
     except TypeError:
@@ -83,11 +84,15 @@ def newtonMethod(guess, equation, derivative):
         else:
             print "An unknown error occurred."
         return
+        
+    # While the rounded result from last iteration isn't the same as the current result, do Newton's method
     while result != guess:
+        # Stop calculating if there have been too many iterations
         if count > 1000:
             print "Centering on a solution failed."
             return
 
+        # Attempt to do Newton's method, exceptions will be caught when thrown and the user will be notified
         try:
             guess = result
             # Calculate the result for the given iteration of Newton's method
@@ -100,8 +105,10 @@ def newtonMethod(guess, equation, derivative):
             print "Divide by 0 error."
             return
         except:
+            # Divide by zero error thrown for some reason as a generic error or not as ZeroDivisionError
             if equation(guess) == 0 and derivative(guess) == 0:
                 print "The result is x{} = {}.".format(count, "0.000000")
+            # At this point the error source is unknown but is still likely the user's fault
             else:
                 print "An unknown error occurred."
             return
